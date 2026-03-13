@@ -7,7 +7,7 @@ async function sendMessage() {
 
     // ... (rest of your logic from before) ...
     // Use this URL format:
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDZO_SKyKMTazgtGQxWxlZq7CH1_8ykypk`;
     
     // ... (fetch call using 'url') ...
 }
