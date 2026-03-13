@@ -8,47 +8,45 @@ async function sendMessage() {
 
     if (!text) return;
 
-    // Display user message
+    // 1. Display user message
     history.innerHTML += `<div class="message user">${text}</div>`;
     chatHistory.push({ role: "user", parts: [{ text: text }] });
     input.value = '';
     status.innerText = "Gemini is thinking...";
 
     try {
-        // CORRECTED URL: Added 'v1beta' to support the flash model
-        const apiKey = "AIzaSyDuF-Tyobn5i-0wAU3XCfuYYrPYyRkTrMM"; 
-       try {
-    const apiKey = "AIzaSyDZO_SKyKMTazgtGQxWxlZq7CH1_8ykypk"; 
-    // UPDATED: Using 'gemini-1.5-flash-latest' which is the current stable identifier
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+        // 2. Setup API details
+        const apiKey = "AIzaSyDZO_SKyKMTazgtGQxWxlZq7CH1_8ykypk"; 
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
 
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contents: chatHistory })
-    });
-
-    const data = await response.json();
-
-    if (data.error) throw new Error(data.error.message);
-    
-    // ... rest of your display logic
-}
+        // 3. Make the request
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents: chatHistory })
+        });
 
         const data = await response.json();
 
-        if (data.error) throw new Error(data.error.message);
+        // 4. Handle API errors
+        if (data.error) {
+            throw new Error(data.error.message);
+        }
 
-        const aiText = data.candidates[0].content.parts[0].text;
-
-        // Display AI response
-        history.innerHTML += `<div class="message ai">${aiText}</div>`;
-        chatHistory.push({ role: "model", parts: [{ text: aiText }] });
+        // 5. Extract AI text and update UI
+        if (data.candidates && data.candidates[0].content) {
+            const aiText = data.candidates[0].content.parts[0].text;
+            history.innerHTML += `<div class="message ai">${aiText}</div>`;
+            chatHistory.push({ role: "model", parts: [{ text: aiText }] });
+        } else {
+            throw new Error("No response from AI.");
+        }
 
     } catch (error) {
         console.error("Fetch Error:", error);
         history.innerHTML += `<div class="message ai">Error: ${error.message}</div>`;
     } finally {
+        // 6. Reset status and scroll to bottom
         status.innerText = "";
         history.scrollTop = history.scrollHeight;
     }
