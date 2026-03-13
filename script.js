@@ -27,7 +27,7 @@ async function sendMessage() {
     try {
         // Replace YOUR_KEY with a FRESH key from AI Studio
         const apiKey = "AIzaSyDuF-Tyobn5i-0wAU3XCfuYYrPYyRkTrMM"; 
-        const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
         const response = await fetch(url, {
             method: 'POST',
