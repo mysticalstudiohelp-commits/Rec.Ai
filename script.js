@@ -1,36 +1,59 @@
-// Global array to keep track of the conversation
+// Keep history at the very top
 let chatHistory = []; 
 
 async function sendMessage() {
-    console.log("Button clicked!");
     const input = document.getElementById('user-input');
     const history = document.getElementById('chat-history');
     const status = document.getElementById('status');
-    const text = input.value;
+    const text = input.value.trim(); // .trim() prevents sending empty spaces
 
-    if (!text) return;
+    // 1. Check if input is empty
+    if (!text) {
+        console.log("Input is empty, not sending.");
+        return;
+    }
 
-    // Add user message to UI and history
-    history.innerHTML += `<div class="message user">${text}</div>`;
-    chatHistory.push({ role: "user", parts: [{ text: text }] });
+    // 2. Clear input and show status
     input.value = '';
-    status.innerText = "AI is thinking...";
+    history.innerHTML += `<div class="message user">${text}</div>`;
+    status.innerText = "Thinking...";
+
+    // 3. Update history in the exact format Gemini requires
+    chatHistory.push({
+        role: "user",
+        parts: [{ text: text }]
+    });
 
     try {
-        const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDuF-Tyobn5i-0wAU3XCfuYYrPYyRkTrMM', {
+        // Replace YOUR_KEY with a FRESH key from AI Studio
+        const apiKey = "AIzaSyDuF-Tyobn5i-0wAU3XCfuYYrPYyRkTrMM"; 
+        const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+        const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ contents: chatHistory })
         });
 
         const data = await response.json();
+
+        // Check if the API returned an error message inside the successful response
+        if (data.error) {
+            throw new Error(data.error.message);
+        }
+
         const aiText = data.candidates[0].content.parts[0].text;
 
-        // Add AI message to UI and history
+        // 4. Update UI and History with AI response
         history.innerHTML += `<div class="message ai">${aiText}</div>`;
-        chatHistory.push({ role: "model", parts: [{ text: aiText }] });
+        chatHistory.push({
+            role: "model",
+            parts: [{ text: aiText }]
+        });
+
     } catch (error) {
-        history.innerHTML += `<div class="message ai">Error: Could not connect to AI.</div>`;
+        console.error("Fetch Error:", error);
+        history.innerHTML += `<div class="message ai">Error: ${error.message}</div>`;
     } finally {
         status.innerText = "";
         history.scrollTop = history.scrollHeight;
