@@ -16,7 +16,7 @@ async function sendMessage() {
 
     try {
         // 2. Setup API details
-        const apiKey = "AIzaSyDuF-Tyobn5i-0wAU3XCfuYYrPYyRkTrMM"; 
+        const apiKey = "AIzaSyA0AZCTgvrigqcZda6iR0BvP8s-a8VtQLA"; 
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
 
         // 3. Make the request
