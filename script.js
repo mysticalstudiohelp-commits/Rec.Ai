@@ -2,6 +2,7 @@
 let chatHistory = []; 
 
 async function sendMessage() {
+    console.log("Button clicked!");
     const input = document.getElementById('user-input');
     const history = document.getElementById('chat-history');
     const status = document.getElementById('status');
