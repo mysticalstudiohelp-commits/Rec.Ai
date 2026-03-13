@@ -8,14 +8,14 @@ async function sendMessage() {
 
     if (!text) return;
 
-    // Update UI
+    // Display user message
     history.innerHTML += `<div class="message user">${text}</div>`;
     chatHistory.push({ role: "user", parts: [{ text: text }] });
     input.value = '';
     status.innerText = "Gemini is thinking...";
 
     try {
-        // CHANGED TO v1beta and ensures correct model name
+        // CORRECTED URL: Added 'v1beta' to support the flash model
         const apiKey = "AIzaSyDuF-Tyobn5i-0wAU3XCfuYYrPYyRkTrMM"; 
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
@@ -27,13 +27,11 @@ async function sendMessage() {
 
         const data = await response.json();
 
-        if (data.error) {
-            throw new Error(data.error.message);
-        }
+        if (data.error) throw new Error(data.error.message);
 
         const aiText = data.candidates[0].content.parts[0].text;
 
-        // Add AI response to UI
+        // Display AI response
         history.innerHTML += `<div class="message ai">${aiText}</div>`;
         chatHistory.push({ role: "model", parts: [{ text: aiText }] });
 
