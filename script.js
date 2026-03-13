@@ -17,13 +17,23 @@ async function sendMessage() {
     try {
         // CORRECTED URL: Added 'v1beta' to support the flash model
         const apiKey = "AIzaSyDuF-Tyobn5i-0wAU3XCfuYYrPYyRkTrMM"; 
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+       try {
+    const apiKey = "AIzaSyDZO_SKyKMTazgtGQxWxlZq7CH1_8ykypk"; 
+    // UPDATED: Using 'gemini-1.5-flash-latest' which is the current stable identifier
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
 
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ contents: chatHistory })
-        });
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: chatHistory })
+    });
+
+    const data = await response.json();
+
+    if (data.error) throw new Error(data.error.message);
+    
+    // ... rest of your display logic
+}
 
         const data = await response.json();
 
