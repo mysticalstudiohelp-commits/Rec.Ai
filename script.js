@@ -17,7 +17,7 @@ async function sendMessage() {
     status.innerText = "AI is thinking...";
 
     try {
-        const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDZO_SKyKMTazgtGQxWxlZq7CH1_8ykypk', {
+        const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDuF-Tyobn5i-0wAU3XCfuYYrPYyRkTrMM', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ contents: chatHistory })
